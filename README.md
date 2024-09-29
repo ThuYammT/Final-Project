@@ -2,7 +2,7 @@
 
 ## Team Members
 - [Thu Ya Myint Myat Thein](https://github.com/ThuYammT)
-- [Min Thant Win](https://github.com/Katou60)
+- [Min Thant Win](https://github.com/Katou69)
 - [Min Thant Naing](https://github.com/minthantnaing1)
 
 ## Project Description
