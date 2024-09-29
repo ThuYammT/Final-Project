@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
     }
   ],
   total: { type: Number, required: true },
+  orderId: { type: String, required: true }, // Add this for order ID
   status: { type: String, default: 'Pending' },
   createdAt: { type: Date, default: Date.now }
 });

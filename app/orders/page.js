@@ -2,164 +2,220 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function OrderPage() {
-  const [products, setProducts] = useState([]); // List of products
-  const [cart, setCart] = useState([]); // Products added to the cart
-  const [selectedProduct, setSelectedProduct] = useState(null); // For product details modal
-  const [total, setTotal] = useState(0); // Total amount of the cart
+export default function OrdersPage() {
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null); // For editing order
+  const [editQuantity, setEditQuantity] = useState({}); // For tracking edited quantities
+  const [updatedTotal, setUpdatedTotal] = useState(0); // Updated total after quantity change
   const router = useRouter();
 
-  // Fetch products from the backend API
+  // Fetch all orders from the backend
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchOrders() {
       try {
-        const res = await fetch("/api/products");
-        if (!res.ok) {
-          throw new Error("Failed to fetch products");
-        }
+        const res = await fetch("/api/orders");
+        if (!res.ok) throw new Error("Failed to fetch orders");
         const data = await res.json();
-        setProducts(data);
+        setOrders(data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching orders:", error);
       }
     }
-    fetchProducts();
+    fetchOrders();
   }, []);
 
-  // Add product to the cart
-  const addToCart = (product, quantity) => {
-    const existingProduct = cart.find((item) => item.productId === product._id);
+  // Handle order deletion
+  const handleDeleteOrder = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    if (confirmDelete) {
+      try {
+        const res = await fetch(`/api/orders/${id}`, {
+          method: "DELETE",
+        });
 
-    if (existingProduct) {
-      // Update quantity if product already exists in the cart
-      const updatedCart = cart.map((item) =>
-        item.productId === product._id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-      setCart(updatedCart);
-    } else {
-      // Add new product to the cart
-      setCart([...cart, { productId: product._id, name: product.name, price: product.price, quantity }]);
+        if (res.ok) {
+          alert("Order deleted successfully!");
+          setOrders(orders.filter((order) => order._id !== id));
+        } else {
+          throw new Error("Failed to delete order");
+        }
+      } catch (error) {
+        console.error("Error deleting order:", error);
+        alert("Failed to delete order. Please try again.");
+      }
     }
   };
 
-  // Calculate total cost
-  useEffect(() => {
-    const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    setTotal(totalAmount);
-  }, [cart]);
+  // Handle showing the edit modal
+  const handleEditOrder = (order) => {
+    setSelectedOrder(order);
+    const initialQuantities = {};
+    order.products.forEach((product) => {
+      initialQuantities[product.productId?._id] = product.quantity;
+    });
+    setEditQuantity(initialQuantities);
 
-  // Handle checkout
-  const handleCheckout = async () => {
+    // Calculate the total based on initial quantities
+    const initialTotal = order.products.reduce(
+      (sum, product) => sum + product.productId.price * product.quantity,
+      0
+    );
+    setUpdatedTotal(initialTotal);
+  };
+
+  // Handle quantity change and update total
+  const handleQuantityChange = (productId, newQuantity, price) => {
+    const newQuantities = {
+      ...editQuantity,
+      [productId]: parseInt(newQuantity, 10),
+    };
+    setEditQuantity(newQuantities);
+
+    // Calculate the updated total
+    const newTotal = selectedOrder.products.reduce((sum, product) => {
+      const quantity = newQuantities[product.productId._id] || product.quantity;
+      return sum + product.productId.price * quantity;
+    }, 0);
+    setUpdatedTotal(newTotal);
+  };
+
+  // Handle updating the order quantity and price
+  const handleUpdateOrder = async () => {
+    const updatedProducts = selectedOrder.products.map((product) => ({
+      productId: product.productId?._id,
+      quantity: editQuantity[product.productId?._id] || product.quantity,
+    }));
+
     try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`/api/orders/${selectedOrder._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          customerId: "CUSTOMER_ID", // Replace with logged-in customer's ID
-          products: cart.map((item) => ({ productId: item.productId, quantity: item.quantity })),
-          total,
+          customerId: selectedOrder.customerId?._id,
+          products: updatedProducts,
+          total: updatedTotal, // Include the updated total price
         }),
       });
 
       if (res.ok) {
-        alert("Order placed successfully!");
-        setCart([]); // Clear the cart
-        router.push("/orders/confirmation"); // Navigate to confirmation page
+        alert("Order updated successfully!");
+        setSelectedOrder(null);
+        const updatedOrder = await res.json();
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === updatedOrder._id ? updatedOrder : order
+          )
+        );
       } else {
-        console.error("Failed to place order");
-        alert("Failed to place order");
+        throw new Error("Failed to update order");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
+      alert("Error updating order, please try again.");
     }
   };
 
   return (
-    <div className="container mx-auto py-10 flex">
-      {/* Product List */}
-      <div className="w-3/4 pr-10">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Order Your Products</h1>
+    <div className="container mx-auto py-10">
+      {/* Header with Dashboard Button */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-extrabold text-gray-900">Orders</h1>
+        <button
+          onClick={() => router.push("/")}
+          className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-all"
+        >
+          Go to Dashboard
+        </button>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className="border rounded-lg p-4 shadow-md transition-transform transform hover:scale-105 bg-white hover:shadow-lg"
-            >
-              <img
-                src={product.image || "/placeholder-image.png"}
-                alt={product.name}
-                className="w-full h-40 object-cover mb-4 rounded-lg"
-              />
-              <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-              <p className="text-lg font-medium text-gray-700">${product.price.toFixed(2)}</p>
-              <p className="text-sm text-gray-600 mb-4">{product.shortDescription}</p>
-
-              <div className="mt-4 flex justify-between">
-                <button
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all"
-                  onClick={() => setSelectedProduct(product)}
-                >
-                  See Details
-                </button>
-                <button
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-all"
-                  onClick={() => addToCart(product, 1)}
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
+      {/* Display orders in table format */}
+      {orders.length === 0 ? (
+        <p className="text-lg text-gray-700">No orders found.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-lg rounded-lg">
+            <thead className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
+              <tr>
+                <th className="py-3 px-6">Order ID</th>
+                <th className="py-3 px-6">Customer Name</th>
+                <th className="py-3 px-6">Total Price</th>
+                <th className="py-3 px-6">Products</th>
+                <th className="py-3 px-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-700 text-sm">
+              {orders.map((order) => (
+                <tr key={order._id} className="border-b hover:bg-gray-50">
+                  <td className="py-4 px-6">{order.orderId}</td>
+                  <td className="py-4 px-6">{order.customerId?.name || "Unknown Customer"}</td>
+                  <td className="py-4 px-6">${order.total.toFixed(2)}</td>
+                  <td className="py-4 px-6">
+                    <ul className="list-disc list-inside">
+                      {order.products.map((product, index) => (
+                        <li key={index}>
+                          {product.productId?.name || "Unknown Product"} (Quantity: {product.quantity})
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="py-4 px-6 text-right">
+                    <button
+                      className="text-blue-500 hover:text-blue-700 mr-4"
+                      onClick={() => handleEditOrder(order)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => handleDeleteOrder(order._id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
+      )}
 
-      {/* Fixed Cart Summary on the Right */}
-      <div className="w-1/4 bg-white p-6 fixed right-0 top-0 bottom-0 overflow-auto shadow-lg border-l">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Cart</h2>
-        {cart.length === 0 ? (
-          <p className="text-gray-700">Your cart is empty.</p>
-        ) : (
-          <div>
-            {cart.map((item) => (
-              <div key={item.productId} className="flex justify-between my-4">
-                <p className="text-gray-900">
-                  {item.name} x {item.quantity}
-                </p>
-                <p className="text-gray-900 font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
-              </div>
-            ))}
-            <div className="text-right text-xl font-bold text-gray-900">Total: ${total.toFixed(2)}</div>
-            <button
-              className="bg-purple-600 text-white px-4 py-2 mt-6 rounded w-full hover:bg-purple-700 transition-all"
-              onClick={handleCheckout}
-            >
-              Checkout
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Product Details Modal */}
-      {selectedProduct && (
+      {/* Modal for editing order quantity */}
+      {selectedOrder && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-            <img
-              src={selectedProduct.image || "/placeholder-image.png"}
-              alt={selectedProduct.name}
-              className="w-full h-48 object-cover mb-4 rounded-lg"
-            />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">{selectedProduct.name}</h2>
-            <p className="text-lg font-semibold text-gray-900">${selectedProduct.price.toFixed(2)}</p>
-            <p className="text-gray-800 mb-4">{selectedProduct.description}</p>
-            <button
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-all"
-              onClick={() => setSelectedProduct(null)}
-            >
-              Close
-            </button>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Edit Order: {selectedOrder.orderId}</h2>
+            <ul className="list-disc list-inside mb-4">
+              {selectedOrder.products.map((product) => (
+                <li key={product.productId._id} className="text-gray-800 mb-2">
+                  {product.productId.name}: 
+                  <input
+                    type="number"
+                    value={editQuantity[product.productId._id] || product.quantity}
+                    min="1"
+                    onChange={(e) =>
+                      handleQuantityChange(product.productId._id, e.target.value, product.productId.price)
+                    }
+                    className="ml-2 p-2 border rounded"
+                  />
+                </li>
+              ))}
+            </ul>
+            <p className="text-lg font-bold text-gray-900 mb-4">Updated Total: ${updatedTotal.toFixed(2)}</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={handleUpdateOrder}
+              >
+                Update
+              </button>
+              <button
+                className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                onClick={() => setSelectedOrder(null)}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

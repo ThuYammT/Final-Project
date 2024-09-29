@@ -42,13 +42,13 @@ export default function CreateCustomerPage() {
   return (
     <div className="min-h-screen bg-gray-100 py-12">
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-4">Add New Customer</h1>
+        <h1 className="text-3xl font-bold mb-4 text-black">Add New Customer</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
             placeholder="Name"
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded text-black" // Added text-black here
             value={formData.name}
             onChange={handleChange}
             required
@@ -57,7 +57,7 @@ export default function CreateCustomerPage() {
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded text-black" // Added text-black here
             value={formData.email}
             onChange={handleChange}
             required
@@ -66,7 +66,7 @@ export default function CreateCustomerPage() {
             type="text"
             name="address"
             placeholder="Address"
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded text-black" // Added text-black here
             value={formData.address}
             onChange={handleChange}
             required
@@ -75,7 +75,7 @@ export default function CreateCustomerPage() {
             type="text"
             name="phoneNumber"
             placeholder="Phone Number"
-            className="w-full mb-4 p-2 border rounded"
+            className="w-full mb-4 p-2 border rounded text-black" // Added text-black here
             value={formData.phoneNumber}
             onChange={handleChange}
             required

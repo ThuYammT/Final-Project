@@ -34,7 +34,6 @@ export default function CustomersPage() {
     const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
     if (confirmDelete) {
       try {
-        // Correct the DELETE request to include the customer ID in the URL
         const res = await fetch(`/api/customers/${id}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -52,21 +51,30 @@ export default function CustomersPage() {
       }
     }
   };
-  
 
   return (
-    <div className="bg-gradient-to-r from-[#f6d365] to-[#fda085] min-h-screen py-10">
+    <div className="bg-white min-h-screen py-10">
       <div className="container mx-auto px-4 lg:px-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-5xl font-extrabold text-gray-900 drop-shadow-lg">Our Customers</h1>
-          <button
-            className="py-3 px-6 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
-            onClick={handleAddCustomerClick}
-          >
-            + Add New Customer
-          </button>
+          <div className="flex space-x-4">
+            
+            <button
+              className="py-2 px-4 bg-black text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
+              onClick={() => router.push("/")} // Navigate to the dashboard
+            >
+              Go to Dashboard
+            </button>
+            <button
+              className="py-2 px-4 bg-black text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
+              onClick={handleAddCustomerClick}
+            >
+              + Add New Customer
+            </button>
+          </div>
         </div>
 
+        {/* Customer List */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-lg rounded-lg">
             <thead>

@@ -70,7 +70,7 @@ export default function EditProductPage() {
             name="name"
             value={product?.name || ""}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 text-black"
             required
           />
         </div>
@@ -87,7 +87,7 @@ export default function EditProductPage() {
             name="category"
             value={product?.category || ""}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 text-black"
             required
           />
         </div>
@@ -104,7 +104,7 @@ export default function EditProductPage() {
             name="price"
             value={product?.price || ""}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 text-black"
             required
           />
         </div>
@@ -121,7 +121,7 @@ export default function EditProductPage() {
             name="model"
             value={product?.model || ""}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 text-black"
             required
           />
         </div>
@@ -137,7 +137,7 @@ export default function EditProductPage() {
             name="description"
             value={product?.description || ""}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 text-black"
             required
           />
         </div>
@@ -150,7 +150,7 @@ export default function EditProductPage() {
             name="image"
             value={product?.image || ""}
             onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
             required
           />
         </div>

@@ -58,13 +58,22 @@ export default function ProductsPage() {
     <div className="bg-gray-100 min-h-screen py-10">
       <div className="container mx-auto px-4 lg:px-12">
         <div className="flex justify-between items-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900">Our Products</h1>
+          <h1 className="text-5xl font-extrabold text-gray-900 drop-shadow-lg">Our Products</h1>
+          <div className="flex space-x-4">
           <button
-            className="py-2 px-4 bg-black text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
-            onClick={handleAddProductClick}
-          >
-            + Add New Product
-          </button>
+  className="py-2 px-4 bg-black text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
+  onClick={() => router.push("/")} // Navigate to the homepage, where your dashboard is
+>
+  Dashboard
+</button>
+
+            <button
+              className="py-2 px-4 bg-black text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-105 transition-all transform"
+              onClick={handleAddProductClick}
+            >
+              + Add New Product
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -117,7 +126,7 @@ export default function ProductsPage() {
             <p className="text-lg text-gray-700 mb-2">Category: {selectedProduct.category}</p>
             <p className="text-lg text-gray-700 mb-2">Model: {selectedProduct.model}</p>
             <p className="text-lg text-gray-700 mb-6">Price: ${selectedProduct.price.toFixed(2)}</p>
-            <p className="text-lg text-gray-700 mb-6">Description: {selectedProduct.description}</p> {/* Added Description */}
+            <p className="text-lg text-gray-700 mb-6">Description: {selectedProduct.description}</p>
             <img
               src={selectedProduct.image || "/placeholder-image.png"}
               alt={selectedProduct.name}
