@@ -68,13 +68,13 @@ export default function EditCustomerPage() {
   return (
     <div className="min-h-screen bg-gray-100 py-12">
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-4">Edit Customer</h1>
+        <h1 className="text-black text-3xl font-bold mb-4">Edit Customer</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
             placeholder="Name"
-            className="w-full mb-4 p-2 border rounded"
+            className="text-black border-black w-full mb-4 p-2 border rounded"
             value={formData.name}
             onChange={handleChange}
           />
@@ -82,7 +82,7 @@ export default function EditCustomerPage() {
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full mb-4 p-2 border rounded"
+            className="text-black border-black w-full mb-4 p-2 border rounded"
             value={formData.email}
             onChange={handleChange}
           />
@@ -90,7 +90,7 @@ export default function EditCustomerPage() {
             type="text"
             name="address"
             placeholder="Address"
-            className="w-full mb-4 p-2 border rounded"
+            className="text-black border-black w-full mb-4 p-2 border rounded"
             value={formData.address}
             onChange={handleChange}
           />
@@ -98,7 +98,7 @@ export default function EditCustomerPage() {
             type="text"
             name="phoneNumber"
             placeholder="Phone Number"
-            className="w-full mb-4 p-2 border rounded"
+            className="text-black border-black w-full mb-4 p-2 border rounded"
             value={formData.phoneNumber}
             onChange={handleChange}
           />
