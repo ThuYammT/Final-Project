@@ -10,6 +10,7 @@ XO Tech Zone is an e-commerce platform for IT electronics. Customers can browse 
 - Product management: Add, edit, delete, and view details of products.
 - Customer management: Add, edit, and delete customers.
 - Orders management: Place orders, view, edit order quantities, and delete orders.
+- Cart and Checkout: Users can add items to the cart, adjust quantities, and complete purchases. Orders are assigned a random Order ID and are linked to existing customers.
 - User-friendly dashboard with navigation between products, customers, and orders.
 
 ### Features:
@@ -35,4 +36,5 @@ XO Tech Zone is an e-commerce platform for IT electronics. Customers can browse 
 1. Clone the repository:
    ```bash
    git clone https://github.com/ThuYammT/Final-Project.git
-   cd xo-tech-zone
+   cd xo-electronics-store
+   
