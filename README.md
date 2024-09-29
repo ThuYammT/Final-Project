@@ -35,4 +35,5 @@ XO Tech Zone is an e-commerce platform for IT electronics. Customers can browse 
 1. Clone the repository:
    ```bash
    git clone https://github.com/ThuYammT/Final-Project.git
-   cd xo-tech-zone
+   cd xo-electronics-store
+   
