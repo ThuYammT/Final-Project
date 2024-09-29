@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# XO Tech Zone
 
-## Getting Started
+## Team Members
+- [Thu Ya Myint Myat Thein](https://github.com/ThuYammT)
+- [Min Thant Win](https://github.com/Katou60)
+- [Min Thant Naing](https://github.com/minthantnaing1)
 
-First, run the development server:
+## Project Description
+XO Tech Zone is an e-commerce platform for IT electronics. Customers can browse products, add them to the cart, and place orders. The project consists of several key features, including:
+- Product management: Add, edit, delete, and view details of products.
+- Customer management: Add, edit, and delete customers.
+- Orders management: Place orders, view, edit order quantities, and delete orders.
+- User-friendly dashboard with navigation between products, customers, and orders.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Features:
+- A responsive product display with hover effects for buttons.
+- Cart functionality with real-time updates for quantity and total price.
+- Order creation with customer selection from an existing list.
+- Order edit and delete functionality for managing orders effectively.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Screenshots
+### Product Page
+![Product Page](./screenshots/product_page.png)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Customer Page
+![Customer Page](./screenshots/customer_page.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Order Page
+![Order Page](./screenshots/order_page.png)
 
-## Learn More
+### Dashboard
+![Dashboard](./screenshots/dashboard.png)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## How to Run the Project
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/xo-tech-zone.git
+   cd xo-tech-zone
